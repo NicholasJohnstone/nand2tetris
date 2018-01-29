@@ -1,0 +1,1 @@
+quick modification of "Square" example project to resemble a very simple snake (no items)

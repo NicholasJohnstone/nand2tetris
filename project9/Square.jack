@@ -1,0 +1,88 @@
+class Square{
+    field int x;
+    field int y;
+    field int size;
+    field int buffer;
+    field boolean collided;
+
+    constructor Square new(int _x,int _y){
+        let x=_x;
+        let y=_y;
+        let collided=false;
+        let size = 16;
+        let buffer = 1;
+        do draw();
+        return this;
+    }
+    method void dispose(){
+        do Memory.deAlloc(this);
+        return;
+    }
+    method void moveUp(){
+        let y=y-size;
+        do wrapY();
+        let collided = detect_collision();
+        do draw();
+        return;
+    }
+    method void moveDown(){
+        let y=y+size;
+        do wrapY();
+        let collided = detect_collision();
+        do draw();
+        return;
+    }
+    method void moveLeft(){
+        let x=x-size;
+        do wrapX();
+        let collided = detect_collision();
+        do draw();
+        return;
+    }
+    method void moveRight(){
+        let x= x+size;
+        do wrapX();
+        let collided = detect_collision();
+        do draw();
+        return;
+    }
+
+    method void wrapX(){
+        if(x<0){
+            let x=x+512;
+        } else{
+            if(x>511){
+                let x=x-512;
+            } }
+        return;
+    }
+    method void wrapY(){
+        if(y<0){
+            let y=y+256;
+        } else{
+            if(y>255){
+                let y=y-256;
+            }
+        }
+        return;
+    }
+    method void draw(){
+        do Screen.setColor(true);
+        do Screen.drawRectangle(x+buffer,y+buffer, x + size - buffer -1, y + size- buffer-1);
+        return;
+    }
+
+    method boolean detect_collision(){
+        var int address;
+        let address=16384+((y+8)*32)+(x/16);
+        if(Memory.peek(address)=0){
+            return false;
+        } else{
+            return true;
+        }
+    }
+
+    method boolean is_collision(){ 
+        return collided;
+    }
+}
